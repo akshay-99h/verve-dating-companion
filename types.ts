@@ -1,4 +1,28 @@
-export type PromptCategory = "funny" | "flirty" | "deep" | "casual";
+export type PromptCategory = "funny" | "flirty" | "borderline" | "deep" | "casual" | "sexual";
+
+export type OpenerCategory =
+  | "all"
+  | "playful"
+  | "direct"
+  | "observational"
+  | "teasing"
+  | "confident"
+  | "soft"
+  | "witty"
+  | "late-night";
+
+export type SmallTalkCategory =
+  | "all"
+  | "everyday"
+  | "food"
+  | "travel"
+  | "entertainment"
+  | "work"
+  | "childhood"
+  | "opinions"
+  | "habits"
+  | "goals"
+  | "random";
 
 export type AudienceCategory =
   | "all"
@@ -7,7 +31,10 @@ export type AudienceCategory =
   | "creative"
   | "traveler"
   | "foodie"
-  | "bookish";
+  | "bookish"
+  | "goth"
+  | "alt"
+  | "nightlife";
 
 export type Prompt = {
   id: string;
@@ -16,11 +43,26 @@ export type Prompt = {
   audiences?: Exclude<AudienceCategory, "all">[];
 };
 
+export type Opener = {
+  id: string;
+  text: string;
+  category: Exclude<OpenerCategory, "all">;
+};
+
+export type SmallTalkTopic = {
+  id: string;
+  text: string;
+  category: Exclude<SmallTalkCategory, "all">;
+};
+
 export type RotatorState = {
   currentIndex: number;
-  autoRotate: boolean;
-  intervalMs: number;
   selectedAudience: AudienceCategory;
+};
+
+export type UserSession = {
+  name: string;
+  email: string;
 };
 
 export type AppTheme = {
