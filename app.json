@@ -15,6 +15,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "ios": {
+      "bundleIdentifier": "com.akshay.promptrotator",
       "supportsTablet": true
     },
     "android": {
