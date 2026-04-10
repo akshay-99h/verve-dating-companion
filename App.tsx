@@ -127,29 +127,10 @@ export default function App() {
       />
 
       <View style={styles.root}>
-        <View
-          pointerEvents="none"
-          style={[
-            styles.blobTop,
-            {
-              backgroundColor: theme.accentSoft,
-            },
-          ]}
-        />
-        <View
-          pointerEvents="none"
-          style={[
-            styles.blobBottom,
-            {
-              backgroundColor: theme.backgroundSecondary,
-            },
-          ]}
-        />
-
         <View style={styles.header}>
           <View>
-            <Text style={[styles.eyebrow, { color: theme.primary }]}>
-              Prompt Rotator
+            <Text style={[styles.eyebrow, { color: theme.textMuted }]}>
+              Photo Reply
             </Text>
             <Text style={[styles.title, { color: theme.text }]}>Prompt</Text>
           </View>
@@ -158,7 +139,7 @@ export default function App() {
           </Text>
         </View>
 
-        <View style={styles.promptSection}>
+        <View style={[styles.promptSection, { borderColor: theme.border }]}>
           <PromptCard prompt={currentPrompt} theme={theme} />
         </View>
 
@@ -174,16 +155,7 @@ export default function App() {
           />
         </View>
 
-        <View
-          style={[
-            styles.settings,
-            {
-              backgroundColor: theme.surface,
-              borderColor: theme.border,
-              shadowColor: theme.shadow,
-            },
-          ]}
-        >
+        <View style={[styles.settings, { borderColor: theme.border }]}>
           <View style={styles.settingsHeader}>
             <View style={styles.settingsCopy}>
               <Text style={[styles.settingsTitle, { color: theme.text }]}>
@@ -211,7 +183,7 @@ export default function App() {
 
           <View style={styles.intervalBlock}>
             <Text style={[styles.intervalLabel, { color: theme.text }]}>
-              Best for
+              Best for her vibe
             </Text>
             <AudienceSelector
               onSelect={setSelectedAudience}
@@ -233,7 +205,7 @@ export default function App() {
 
           <View style={styles.captionRow}>
             <Text style={[styles.caption, { color: theme.textMuted }]}>
-              Clipboard stays untouched until you tap Copy.
+              Built for replying to picture posts, not full chat automation.
             </Text>
             <Pressable
               onPress={shuffle}
@@ -242,7 +214,7 @@ export default function App() {
                 styles.inlineAction,
                 {
                   opacity: promptCount < 2 ? 0.45 : 1,
-                  backgroundColor: pressed ? theme.secondaryPressed : theme.secondary,
+                  backgroundColor: "transparent",
                   borderColor: theme.border,
                 },
               ]}
@@ -281,28 +253,9 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingTop: 12,
     paddingBottom: 18,
-    gap: 18,
-    overflow: "hidden",
-  },
-  blobTop: {
-    position: "absolute",
-    top: -80,
-    right: -50,
-    width: 240,
-    height: 240,
-    borderRadius: 999,
-    opacity: 0.22,
-  },
-  blobBottom: {
-    position: "absolute",
-    left: -60,
-    bottom: 180,
-    width: 220,
-    height: 220,
-    borderRadius: 999,
-    opacity: 0.24,
+    gap: 20,
   },
   header: {
     flexDirection: "row",
@@ -312,15 +265,15 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   eyebrow: {
-    fontSize: 13,
-    fontWeight: "700",
-    letterSpacing: 1.5,
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 1.1,
     textTransform: "uppercase",
-    marginBottom: 8,
+    marginBottom: 6,
   },
   title: {
-    fontSize: 30,
-    lineHeight: 34,
+    fontSize: 34,
+    lineHeight: 38,
     fontFamily: Platform.select({
       ios: "Avenir Next",
       android: "sans-serif-medium",
@@ -337,22 +290,17 @@ const styles = StyleSheet.create({
   promptSection: {
     flex: 1,
     minHeight: 280,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    paddingVertical: 18,
   },
   controlsSection: {
     gap: 12,
   },
   settings: {
-    borderWidth: 1,
-    borderRadius: 26,
-    padding: 18,
+    borderTopWidth: 1,
+    paddingTop: 18,
     gap: 16,
-    shadowOffset: {
-      width: 0,
-      height: 12,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 24,
-    elevation: 8,
   },
   settingsHeader: {
     flexDirection: "row",
@@ -404,7 +352,7 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     bottom: 22,
-    borderRadius: 18,
+    borderRadius: 999,
     paddingHorizontal: 16,
     paddingVertical: 14,
     alignItems: "center",

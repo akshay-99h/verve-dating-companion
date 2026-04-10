@@ -75,9 +75,7 @@ export function PromptCard({ prompt, theme }: PromptCardProps) {
       style={[
         styles.frame,
         {
-          backgroundColor: theme.surface,
           borderColor: theme.border,
-          shadowColor: theme.shadow,
         },
       ]}
     >
@@ -85,7 +83,6 @@ export function PromptCard({ prompt, theme }: PromptCardProps) {
         style={[
           styles.badge,
           {
-            backgroundColor: theme.surfaceStrong,
             borderColor: theme.border,
           },
         ]}
@@ -129,26 +126,17 @@ const styles = StyleSheet.create({
   frame: {
     flex: 1,
     width: "100%",
-    borderWidth: 1,
-    borderRadius: 32,
-    paddingHorizontal: 24,
-    paddingTop: 22,
-    paddingBottom: 24,
+    paddingHorizontal: 0,
+    paddingTop: 6,
+    paddingBottom: 8,
     justifyContent: "space-between",
-    shadowOffset: {
-      width: 0,
-      height: 18,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 32,
-    elevation: 10,
   },
   badge: {
-    alignSelf: "center",
+    alignSelf: "flex-start",
     borderRadius: 999,
     borderWidth: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
   },
   badgeText: {
     fontSize: 12,
@@ -158,9 +146,10 @@ const styles = StyleSheet.create({
   promptWrap: {
     flex: 1,
     justifyContent: "center",
+    paddingVertical: 16,
   },
   promptText: {
-    textAlign: "center",
+    textAlign: "left",
     fontFamily: Platform.select({
       ios: "Georgia",
       android: "serif",
@@ -169,7 +158,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   note: {
-    textAlign: "center",
+    textAlign: "left",
     fontSize: 13,
     lineHeight: 18,
   },

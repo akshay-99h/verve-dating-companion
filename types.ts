@@ -32,6 +32,12 @@ export type AppTheme = {
   primaryPressed: string;
   secondary: string;
   secondaryPressed: string;
+  actionCopy: string;
+  actionCopyPressed: string;
+  actionNext: string;
+  actionNextPressed: string;
+  actionShuffle: string;
+  actionShufflePressed: string;
   text: string;
   textMuted: string;
   border: string;
