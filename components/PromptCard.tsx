@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   Animated,
+  PanResponder,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   useWindowDimensions,
@@ -11,6 +13,9 @@ import {
 import type { AppTheme, Prompt } from "../types";
 
 type PromptCardProps = {
+  footerAccessory?: ReactNode;
+  onAdvance?: () => void;
+  onCopy?: () => void;
   prompt: Prompt | null;
   theme: AppTheme;
 };
@@ -18,15 +23,18 @@ type PromptCardProps = {
 const EMPTY_STATE_MESSAGE =
   "Add prompts in data/prompts.ts to start rotating through them.";
 
-function formatCategory(category?: Prompt["category"]) {
-  return category ? category.toUpperCase() : "PROMPT";
-}
-
-export function PromptCard({ prompt, theme }: PromptCardProps) {
+export function PromptCard({
+  footerAccessory,
+  onAdvance,
+  onCopy,
+  prompt,
+  theme,
+}: PromptCardProps) {
   const { width } = useWindowDimensions();
   const [displayedPrompt, setDisplayedPrompt] = useState(prompt);
   const opacity = useRef(new Animated.Value(1)).current;
   const translateY = useRef(new Animated.Value(0)).current;
+  const didSwipe = useRef(false);
 
   useEffect(() => {
     const nextKey = prompt?.id ?? "empty";
@@ -69,6 +77,36 @@ export function PromptCard({ prompt, theme }: PromptCardProps) {
 
   const fontSize = Math.max(22, Math.min(28, width * 0.065));
   const lineHeight = Math.round(fontSize * 1.42);
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onMoveShouldSetPanResponder: (_, gestureState) =>
+          Boolean(onAdvance) &&
+          Math.abs(gestureState.dx) > 16 &&
+          Math.abs(gestureState.dx) > Math.abs(gestureState.dy),
+        onPanResponderGrant: () => {
+          didSwipe.current = false;
+        },
+        onPanResponderMove: (_, gestureState) => {
+          if (
+            !didSwipe.current &&
+            onAdvance &&
+            Math.abs(gestureState.dx) > 48 &&
+            Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
+          ) {
+            didSwipe.current = true;
+            onAdvance();
+          }
+        },
+        onPanResponderRelease: () => {
+          didSwipe.current = false;
+        },
+        onPanResponderTerminate: () => {
+          didSwipe.current = false;
+        },
+      }),
+    [onAdvance],
+  );
 
   return (
     <View
@@ -79,20 +117,8 @@ export function PromptCard({ prompt, theme }: PromptCardProps) {
         },
       ]}
     >
-      <View
-        style={[
-          styles.badge,
-          {
-            borderColor: theme.border,
-          },
-        ]}
-      >
-        <Text style={[styles.badgeText, { color: theme.primary }]}>
-          {formatCategory(displayedPrompt?.category)}
-        </Text>
-      </View>
-
       <Animated.View
+        {...panResponder.panHandlers}
         style={[
           styles.promptWrap,
           {
@@ -101,52 +127,49 @@ export function PromptCard({ prompt, theme }: PromptCardProps) {
           },
         ]}
       >
-        <Text
-          style={[
-            styles.promptText,
-            {
-              color: theme.text,
-              fontSize,
-              lineHeight,
-            },
-          ]}
+        <Pressable
+          disabled={!displayedPrompt || !onCopy}
+          onPress={() => {
+            if (!didSwipe.current) {
+              onCopy?.();
+            }
+          }}
         >
-          {displayedPrompt?.text ?? EMPTY_STATE_MESSAGE}
-        </Text>
+          <Text
+            style={[
+              styles.promptText,
+              {
+                color: theme.text,
+                fontSize,
+                lineHeight,
+              },
+            ]}
+          >
+            {displayedPrompt?.text ?? EMPTY_STATE_MESSAGE}
+          </Text>
+        </Pressable>
       </Animated.View>
 
-      <Text style={[styles.note, { color: theme.textMuted }]}>
-        Tap Copy when you want this on your clipboard.
-      </Text>
+      <View style={styles.footerRow}>
+        <Text style={[styles.note, { color: theme.textMuted }]}>
+          Tap to copy or swipe to change the reply.
+        </Text>
+        {footerAccessory ? <View style={styles.footerAccessory}>{footerAccessory}</View> : null}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   frame: {
-    flex: 1,
     width: "100%",
     paddingHorizontal: 0,
-    paddingTop: 6,
-    paddingBottom: 8,
-    justifyContent: "space-between",
-  },
-  badge: {
-    alignSelf: "flex-start",
-    borderRadius: 999,
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: "700",
-    letterSpacing: 1.3,
+    paddingTop: 0,
+    paddingBottom: 0,
+    gap: 10,
   },
   promptWrap: {
-    flex: 1,
-    justifyContent: "center",
-    paddingVertical: 16,
+    paddingTop: 18,
   },
   promptText: {
     textAlign: "left",
@@ -158,8 +181,23 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   note: {
+    flexShrink: 1,
     textAlign: "left",
     fontSize: 13,
     lineHeight: 18,
+    marginTop: 2,
+  },
+  footerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  footerAccessory: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    flexShrink: 0,
   },
 });

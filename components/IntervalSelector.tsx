@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { MotionPressable } from "./MotionPressable";
 import type { AppTheme } from "../types";
 import {
   formatIntervalLabel,
@@ -23,10 +24,11 @@ export function IntervalSelector({
         const isSelected = value === selectedValue;
 
         return (
-          <Pressable
+          <MotionPressable
             key={value}
             accessibilityRole="button"
             onPress={() => onSelect(value)}
+            scaleTo={0.98}
             style={({ pressed }) => [
               styles.option,
               {
@@ -43,13 +45,13 @@ export function IntervalSelector({
               style={[
                 styles.optionLabel,
                 {
-                  color: isSelected ? "#FFF8F5" : theme.text,
+                  color: isSelected ? theme.background : theme.text,
                 },
               ]}
             >
               {formatIntervalLabel(value)}
             </Text>
-          </Pressable>
+          </MotionPressable>
         );
       })}
     </View>

@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { MotionPressable } from "./MotionPressable";
 import type { AppTheme, AudienceCategory } from "../types";
 import { AUDIENCE_OPTIONS, formatAudienceLabel } from "../utils/rotator";
 
@@ -20,10 +21,11 @@ export function AudienceSelector({
         const isSelected = value === selectedValue;
 
         return (
-          <Pressable
+          <MotionPressable
             key={value}
             accessibilityRole="button"
             onPress={() => onSelect(value)}
+            scaleTo={0.98}
             style={({ pressed }) => [
               styles.option,
               {
@@ -40,13 +42,13 @@ export function AudienceSelector({
               style={[
                 styles.optionLabel,
                 {
-                  color: isSelected ? "#FFF8F5" : theme.text,
+                  color: isSelected ? theme.background : theme.text,
                 },
               ]}
             >
               {formatAudienceLabel(value)}
             </Text>
-          </Pressable>
+          </MotionPressable>
         );
       })}
     </View>

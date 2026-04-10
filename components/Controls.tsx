@@ -1,11 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { MotionPressable } from "./MotionPressable";
 import type { AppTheme } from "../types";
 
 type ControlsProps = {
   canChangePrompt: boolean;
-  canCopy: boolean;
-  onCopy: () => void;
   onNext: () => void;
   onPrevious: () => void;
   onShuffle: () => void;
@@ -13,7 +12,7 @@ type ControlsProps = {
 };
 
 type ActionButtonProps = {
-  accent?: "copy" | "next" | "shuffle" | "neutral";
+  accent?: "next" | "shuffle" | "neutral";
   disabled?: boolean;
   isPrimary?: boolean;
   label: string;
@@ -30,18 +29,20 @@ function ActionButton({
   theme,
 }: ActionButtonProps) {
   const backgroundByAccent = {
-    copy: [theme.actionCopy, theme.actionCopyPressed],
     next: [theme.actionNext, theme.actionNextPressed],
     shuffle: [theme.actionShuffle, theme.actionShufflePressed],
     neutral: [theme.secondary, theme.secondaryPressed],
   } as const;
   const [defaultColor, pressedColor] = backgroundByAccent[accent];
+  const labelColor =
+    accent === "next" ? theme.background : accent === "shuffle" ? "#111111" : theme.text;
 
   return (
-    <Pressable
+    <MotionPressable
       accessibilityRole="button"
       disabled={disabled}
       onPress={onPress}
+      scaleTo={0.985}
       style={({ pressed }) => [
         styles.button,
         isPrimary ? styles.primaryButton : styles.secondaryButton,
@@ -56,21 +57,18 @@ function ActionButton({
         style={[
           styles.buttonLabel,
           {
-            color:
-              accent === "copy" || accent === "next" ? "#FFFFFF" : theme.text,
+            color: labelColor,
           },
         ]}
       >
         {label}
       </Text>
-    </Pressable>
+    </MotionPressable>
   );
 }
 
 export function Controls({
   canChangePrompt,
-  canCopy,
-  onCopy,
   onNext,
   onPrevious,
   onShuffle,
@@ -78,15 +76,6 @@ export function Controls({
 }: ControlsProps) {
   return (
     <View style={styles.container}>
-      <ActionButton
-        isPrimary
-        accent="copy"
-        label="Copy"
-        onPress={onCopy}
-        disabled={!canCopy}
-        theme={theme}
-      />
-
       <View style={styles.row}>
         <View style={styles.flexItem}>
           <ActionButton
@@ -121,9 +110,7 @@ export function Controls({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: 12,
-  },
+  container: {},
   row: {
     flexDirection: "row",
     alignItems: "center",

@@ -5,7 +5,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { AppState, type AppStateStatus } from "react-native";
 
 import type { AudienceCategory, Prompt, RotatorState } from "../types";
 import {
@@ -14,7 +13,6 @@ import {
   getNextIndex,
   getPreviousIndex,
   getRandomIndex,
-  sanitizeInterval,
 } from "../utils/rotator";
 import {
   DEFAULT_ROTATOR_STATE,
@@ -34,7 +32,6 @@ function updateState(
 export function useRotator(promptList: Prompt[]) {
   const [state, setState] = useState<RotatorState>(DEFAULT_ROTATOR_STATE);
   const [isHydrated, setIsHydrated] = useState(false);
-  const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
   const filteredPrompts =
     state.selectedAudience === "all"
       ? promptList
@@ -64,8 +61,6 @@ export function useRotator(promptList: Prompt[]) {
 
         setState({
           currentIndex: clampIndex(storedState.currentIndex, filteredPromptCount),
-          autoRotate: filteredPromptCount > 1 ? storedState.autoRotate : false,
-          intervalMs: sanitizeInterval(storedState.intervalMs),
           selectedAudience,
         });
       }
@@ -82,17 +77,8 @@ export function useRotator(promptList: Prompt[]) {
     updateState(setState, (previousState) => ({
       ...previousState,
       currentIndex: clampIndex(previousState.currentIndex, promptCount),
-      autoRotate: promptCount > 1 ? previousState.autoRotate : false,
     }));
   }, [promptCount]);
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", setAppState);
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
 
   useEffect(() => {
     if (!isHydrated) {
@@ -101,23 +87,6 @@ export function useRotator(promptList: Prompt[]) {
 
     void saveRotatorState(state);
   }, [isHydrated, state]);
-
-  useEffect(() => {
-    if (!isHydrated || !state.autoRotate || appState !== "active" || promptCount < 2) {
-      return;
-    }
-
-    const intervalId = setInterval(() => {
-      updateState(setState, (previousState) => ({
-        ...previousState,
-        currentIndex: getNextIndex(previousState.currentIndex, promptCount),
-      }));
-    }, state.intervalMs);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [appState, isHydrated, promptCount, state.autoRotate, state.intervalMs]);
 
   const currentPrompt = filteredPrompts[state.currentIndex] ?? null;
 
@@ -154,20 +123,6 @@ export function useRotator(promptList: Prompt[]) {
     }));
   }
 
-  function setAutoRotate(value: boolean) {
-    updateState(setState, (previousState) => ({
-      ...previousState,
-      autoRotate: promptCount > 1 ? value : false,
-    }));
-  }
-
-  function setIntervalMs(value: number) {
-    updateState(setState, (previousState) => ({
-      ...previousState,
-      intervalMs: sanitizeInterval(value),
-    }));
-  }
-
   function setSelectedAudience(value: AudienceCategory) {
     updateState(setState, (previousState) => ({
       ...previousState,
@@ -177,18 +132,13 @@ export function useRotator(promptList: Prompt[]) {
   }
 
   return {
-    autoRotate: state.autoRotate,
     currentIndex: state.currentIndex,
     currentPrompt,
-    intervalMs: state.intervalMs,
-    isAppActive: appState === "active",
     isHydrated,
     promptCount,
     selectedAudience: state.selectedAudience,
     goToNext,
     goToPrevious,
-    setAutoRotate,
-    setIntervalMs,
     setSelectedAudience,
     shuffle,
   };
