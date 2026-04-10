@@ -384,6 +384,8 @@ export default function App() {
         return prompts.filter((prompt) => prompt.category === "flirty");
       case "borderline":
         return prompts.filter((prompt) => prompt.category === "borderline");
+      case "sexual":
+        return prompts.filter((prompt) => prompt.category === "sexual");
       case "playful":
       case "teasing":
         return prompts.filter((prompt) => prompt.category === "funny");
@@ -410,6 +412,8 @@ export default function App() {
         return "flirty";
       case "borderline":
         return "borderline";
+      case "sexual":
+        return "sexual";
       case "funny":
         return "playful";
       case "casual":

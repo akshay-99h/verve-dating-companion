@@ -7,6 +7,7 @@ export type ReplyMood =
   | "all"
   | "flirty"
   | "borderline"
+  | "sexual"
   | "naughty"
   | "bold"
   | "playful"
@@ -18,6 +19,7 @@ const REPLY_MOOD_OPTIONS: readonly ReplyMood[] = [
   "all",
   "flirty",
   "borderline",
+  "sexual",
   "naughty",
   "bold",
   "playful",
@@ -30,6 +32,7 @@ const REPLY_MOOD_LABELS: Record<ReplyMood, string> = {
   all: "All",
   flirty: "Flirty",
   borderline: "Borderline",
+  sexual: "Sexual",
   naughty: "Naughty",
   bold: "Bold",
   playful: "Playful",
