@@ -75,8 +75,22 @@ export function PromptCard({
     });
   }, [displayedPrompt?.id, opacity, prompt, prompt?.id, translateY]);
 
-  const fontSize = Math.max(22, Math.min(28, width * 0.065));
-  const lineHeight = Math.round(fontSize * 1.42);
+  const promptLength = displayedPrompt?.text.length ?? EMPTY_STATE_MESSAGE.length;
+  const baseFontSize = Math.max(21, Math.min(27, width * 0.061));
+  const lengthScale =
+    promptLength > 260
+      ? 0.72
+      : promptLength > 220
+        ? 0.76
+        : promptLength > 180
+          ? 0.82
+          : promptLength > 140
+            ? 0.88
+            : promptLength > 105
+              ? 0.94
+              : 1;
+  const fontSize = Math.round(baseFontSize * lengthScale);
+  const lineHeight = Math.round(fontSize * 1.34);
   const panResponder = useMemo(
     () =>
       PanResponder.create({
@@ -162,14 +176,19 @@ export function PromptCard({
 
 const styles = StyleSheet.create({
   frame: {
+    flex: 1,
     width: "100%",
-    paddingHorizontal: 0,
+    paddingHorizontal: 8,
     paddingTop: 0,
-    paddingBottom: 0,
-    gap: 10,
+    paddingBottom: 2,
+    gap: 8,
+    justifyContent: "center",
   },
   promptWrap: {
-    paddingTop: 18,
+    flexShrink: 1,
+    justifyContent: "center",
+    paddingTop: 10,
+    paddingBottom: 6,
   },
   promptText: {
     textAlign: "left",
@@ -183,21 +202,21 @@ const styles = StyleSheet.create({
   note: {
     flexShrink: 1,
     textAlign: "left",
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 2,
+    fontSize: 11,
+    lineHeight: 14,
   },
   footerRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
+    justifyContent: "space-between",
+    gap: 6,
+    paddingBottom: 2,
   },
   footerAccessory: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    gap: 6,
     flexShrink: 0,
   },
 });

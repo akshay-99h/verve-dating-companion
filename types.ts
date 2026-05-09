@@ -1,4 +1,11 @@
-export type PromptCategory = "funny" | "flirty" | "borderline" | "deep" | "casual" | "sexual";
+export type PromptCategory =
+  | "funny"
+  | "flirty"
+  | "borderline"
+  | "deep"
+  | "heartwarming"
+  | "casual"
+  | "sexual";
 
 export type OpenerCategory =
   | "all"
@@ -31,10 +38,13 @@ export type AudienceCategory =
   | "creative"
   | "traveler"
   | "foodie"
+  | "pretty"
   | "bookish"
   | "goth"
   | "alt"
-  | "nightlife";
+  | "nightlife"
+  | "anime"
+  | "movies";
 
 export type Prompt = {
   id: string;

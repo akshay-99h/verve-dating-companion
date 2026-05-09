@@ -393,6 +393,8 @@ export default function App() {
         return prompts.filter((prompt) => prompt.category === "casual");
       case "thoughtful":
         return prompts.filter((prompt) => prompt.category === "deep");
+      case "heartwarming":
+        return prompts.filter((prompt) => prompt.category === "heartwarming");
       default:
         return prompts;
     }
@@ -420,6 +422,8 @@ export default function App() {
         return "casual";
       case "deep":
         return "thoughtful";
+      case "heartwarming":
+        return "heartwarming";
       default:
         return null;
     }
@@ -635,9 +639,6 @@ export default function App() {
               ) : (
                 <View style={styles.tabContent}>
                   <View style={styles.intervalBlock}>
-                    <Text style={[styles.intervalLabel, { color: theme.text }]}>
-                      Best for her vibe
-                    </Text>
                     <AudienceSelector
                       onSelect={setSelectedAudience}
                       selectedValue={selectedAudience}
@@ -960,8 +961,8 @@ const styles = StyleSheet.create({
   },
   root: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 12,
+    paddingHorizontal: 16,
+    paddingTop: 8,
     overflow: "hidden",
   },
   scrollView: {
@@ -971,16 +972,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    gap: 16,
-    paddingTop: 8,
-    paddingBottom: 18,
+    gap: 12,
+    paddingTop: 4,
+    paddingBottom: 12,
   },
   eyebrow: {
     fontSize: 12,
     fontWeight: "600",
     letterSpacing: 1.1,
     textTransform: "uppercase",
-    marginBottom: 6,
+    marginBottom: 2,
   },
   title: {
     fontSize: 34,
@@ -996,40 +997,41 @@ const styles = StyleSheet.create({
   counter: {
     fontSize: 14,
     fontWeight: "600",
-    marginTop: 6,
+    marginTop: 4,
   },
   scrollContent: {
-    paddingBottom: 90,
+    paddingBottom: 84,
   },
   repliesPage: {
     flex: 1,
-    paddingBottom: 90,
+    paddingBottom: 84,
   },
   repliesPageContent: {
     flex: 1,
-    gap: 18,
+    gap: 12,
   },
   tabContent: {
-    gap: 22,
+    gap: 14,
   },
   promptSection: {
     minHeight: 190,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    paddingVertical: 12,
+    paddingVertical: 8,
   },
   replyPromptSection: {
     flex: 1,
     justifyContent: "center",
+    minHeight: 220,
   },
   controlsSection: {
     gap: 12,
   },
   intervalBlock: {
-    gap: 12,
+    gap: 8,
   },
   moodFilterBlock: {
-    gap: 10,
+    gap: 8,
   },
   intervalLabel: {
     fontSize: 15,
@@ -1049,7 +1051,7 @@ const styles = StyleSheet.create({
   skeletonChipRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 10,
+    gap: 8,
   },
   replySkeletonContent: {
     gap: 20,
@@ -1193,8 +1195,8 @@ const styles = StyleSheet.create({
   },
   bottomDockWrap: {
     position: "absolute",
-    left: -20,
-    right: -20,
+    left: -16,
+    right: -16,
     bottom: 0,
     paddingTop: 0,
     paddingBottom: 0,
@@ -1204,9 +1206,9 @@ const styles = StyleSheet.create({
     minHeight: 72,
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 12,
-    paddingTop: 6,
-    paddingBottom: 6,
+    paddingHorizontal: 10,
+    paddingTop: 4,
+    paddingBottom: 4,
     gap: 4,
   },
   navItem: {

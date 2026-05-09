@@ -17,10 +17,13 @@ export const AUDIENCE_OPTIONS = [
   "creative",
   "traveler",
   "foodie",
+  "pretty",
   "bookish",
   "goth",
   "alt",
   "nightlife",
+  "anime",
+  "movies",
 ] as const satisfies readonly AudienceCategory[];
 
 const AUDIENCE_LABELS: Record<AudienceCategory, string> = {
@@ -30,10 +33,13 @@ const AUDIENCE_LABELS: Record<AudienceCategory, string> = {
   creative: "Creative",
   traveler: "Traveler",
   foodie: "Foodie",
+  pretty: "Pretty",
   bookish: "Bookish",
   goth: "Goth",
   alt: "Alt",
   nightlife: "Nightlife",
+  anime: "Anime/Manga",
+  movies: "Movies/Shows",
 };
 
 export function clampIndex(index: number, size: number): number {

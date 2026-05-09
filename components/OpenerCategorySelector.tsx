@@ -62,18 +62,19 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 10,
+    gap: 8,
   },
   option: {
     borderRadius: 999,
     borderWidth: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 11,
+    minHeight: 36,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
     alignItems: "center",
     justifyContent: "center",
   },
   optionLabel: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "700",
   },
 });

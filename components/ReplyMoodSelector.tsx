@@ -13,7 +13,8 @@ export type ReplyMood =
   | "playful"
   | "teasing"
   | "casual"
-  | "thoughtful";
+  | "thoughtful"
+  | "heartwarming";
 
 const REPLY_MOOD_OPTIONS: readonly ReplyMood[] = [
   "all",
@@ -26,6 +27,7 @@ const REPLY_MOOD_OPTIONS: readonly ReplyMood[] = [
   "teasing",
   "casual",
   "thoughtful",
+  "heartwarming",
 ];
 
 const REPLY_MOOD_LABELS: Record<ReplyMood, string> = {
@@ -39,6 +41,7 @@ const REPLY_MOOD_LABELS: Record<ReplyMood, string> = {
   teasing: "Teasing",
   casual: "Casual",
   thoughtful: "Thoughtful",
+  heartwarming: "Heartwarming",
 };
 
 type ReplyMoodSelectorProps = {
@@ -99,18 +102,18 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 10,
+    gap: 8,
   },
   option: {
-    minHeight: 42,
+    minHeight: 36,
     borderWidth: 1,
     borderRadius: 999,
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
     alignItems: "center",
     justifyContent: "center",
   },
   optionLabel: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "700",
   },
 });
