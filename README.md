@@ -28,6 +28,14 @@ npm install
 npm start -- --clear
 ```
 
+Web app:
+
+```bash
+cd web
+pnpm install
+pnpm run dev
+```
+
 ## Notes
 
 - Clipboard is only written when the user taps `Copy`.

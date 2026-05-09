@@ -22,6 +22,7 @@ Install these first:
 
 - Node.js 20+ recommended
 - npm 10+ recommended
+- pnpm 10+ recommended for the web app
 - Xcode and CocoaPods if you want to run iOS locally
 - A WorkOS account if you want to run the authenticated web app
 
@@ -44,9 +45,25 @@ Web app dependencies:
 
 ```bash
 cd web
-npm install
+pnpm install
 cd ..
 ```
+
+## 1.1 Web structure notes
+
+The `web/` app now supports:
+
+- TypeScript
+- Tailwind CSS 4
+- shadcn-compatible component organization
+
+The default reusable UI path is [`web/components/ui/`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/components/ui).
+
+Why this folder matters:
+
+- It gives shared UI primitives a predictable location.
+- It keeps the app compatible with shadcn-style component additions.
+- It avoids mixing low-level reusable pieces with route-specific view code.
 
 ## 2. Shared content workflow
 
@@ -136,14 +153,14 @@ Production target:
 From the repo root:
 
 ```bash
-npm run web:dev
+pnpm run web:dev
 ```
 
 Or directly:
 
 ```bash
 cd web
-npm run dev
+pnpm run dev
 ```
 
 Open:
@@ -153,8 +170,8 @@ Open:
 Available scripts:
 
 ```bash
-npm run web:typecheck
-npm run web:build
+pnpm run web:typecheck
+pnpm run web:build
 ```
 
 Or inside `web/`:
@@ -189,13 +206,13 @@ npm start
 Web typecheck:
 
 ```bash
-npm run web:typecheck
+pnpm run web:typecheck
 ```
 
 Web production build:
 
 ```bash
-npm run web:build
+pnpm run web:build
 ```
 
 Important:
@@ -273,7 +290,7 @@ Fix:
 
 Fix:
 
-- Run `npm run web:typecheck`
+- Run `pnpm run web:typecheck`
 - Recheck WorkOS env vars
 - Recheck [`web/middleware.ts`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/middleware.ts), [`web/app/login/route.ts`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/app/login/route.ts), and [`web/app/callback/route.ts`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/app/callback/route.ts)
 
@@ -281,12 +298,12 @@ Fix:
 
 1. Edit shared prompt content in the root `data/` files.
 2. Run the Expo app if you want to check native behavior.
-3. Run `npm run web:dev` if you want to check the authenticated web app.
+3. Run `pnpm run web:dev` if you want to check the authenticated web app.
 4. Before shipping web changes, run:
 
 ```bash
-npm run web:typecheck
-npm run web:build
+pnpm run web:typecheck
+pnpm run web:build
 ```
 
 ## 11. Useful commands
@@ -303,7 +320,7 @@ npm run android
 Web app:
 
 ```bash
-npm run web:dev
-npm run web:typecheck
-npm run web:build
+pnpm run web:dev
+pnpm run web:typecheck
+pnpm run web:build
 ```

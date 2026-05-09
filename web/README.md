@@ -2,6 +2,20 @@
 
 Next.js App Router web app with WorkOS AuthKit and installable PWA support.
 
+## Project support
+
+This app now supports:
+
+- TypeScript
+- Tailwind CSS 4
+- shadcn-compatible structure with [`components/ui/`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/components/ui)
+
+Why `components/ui` matters:
+
+- It gives reusable interface primitives a stable home.
+- It keeps the project compatible with shadcn-style additions and future shared UI work.
+- It separates generic building blocks from page-specific components.
+
 ## Why the content stays in sync
 
 The web app imports from the repo-level `shared/` export layer:
@@ -37,8 +51,8 @@ Production URLs:
 ## Run
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## Deploy

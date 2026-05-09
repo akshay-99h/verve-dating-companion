@@ -8,9 +8,9 @@
     "start:tunnel": "node ./scripts/start-expo-tunnel.cjs",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web:dev": "npm --prefix ./web run dev",
-    "web:build": "npm --prefix ./web run build",
-    "web:typecheck": "npm --prefix ./web run typecheck"
+    "web:dev": "pnpm --dir ./web run dev",
+    "web:build": "pnpm --dir ./web run build",
+    "web:typecheck": "pnpm --dir ./web run typecheck"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
