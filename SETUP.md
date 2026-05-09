@@ -275,7 +275,7 @@ Fix:
 
 - Run `npm run web:typecheck`
 - Recheck WorkOS env vars
-- Recheck [`web/proxy.ts`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/proxy.ts), [`web/app/login/route.ts`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/app/login/route.ts), and [`web/app/callback/route.ts`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/app/callback/route.ts)
+- Recheck [`web/middleware.ts`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/middleware.ts), [`web/app/login/route.ts`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/app/login/route.ts), and [`web/app/callback/route.ts`](/Volumes/HP%20P900%201TB%20Media/Personal%20Projects/dating-liker/prompt-generator/web/app/callback/route.ts)
 
 ## 10. Recommended day-to-day workflow
 
