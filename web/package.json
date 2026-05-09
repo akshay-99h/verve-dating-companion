@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@workos-inc/authkit-nextjs": "^0.17.0",
+    "@workos-inc/authkit-nextjs": "^4.0.1",
     "next": "^15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
