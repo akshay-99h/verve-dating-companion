@@ -1,9 +1,6 @@
 import Link from "next/link";
-import { getSignUpUrl, withAuth } from "@workos-inc/authkit-nextjs";
 
-export default async function MarketingPage() {
-  const [{ user }, signUpUrl] = await Promise.all([withAuth(), getSignUpUrl()]);
-
+export default function MarketingPage() {
   return (
     <main className="marketing-shell">
       <section className="hero-card">
@@ -15,10 +12,10 @@ export default async function MarketingPage() {
             reply or opener is a single edit in the repo.
           </p>
           <div className="hero-actions">
-            <Link className="primary-link" href={user ? "/app" : "/login"}>
-              {user ? "Open web app" : "Sign in"}
+            <Link className="primary-link" href="/login">
+              Sign in
             </Link>
-            <Link className="secondary-link" href={signUpUrl}>
+            <Link className="secondary-link" href="/signup">
               Create account
             </Link>
           </div>
