@@ -47,11 +47,6 @@ main {
   display: block;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 button,
 input,
 select {
