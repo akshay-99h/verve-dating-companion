@@ -7,3 +7,19 @@ npm-debug.*
 *.p8
 *.p12
 *.key
+.DS_Store
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+web/.env.local
+
+# Next.js web app
+web/node_modules
+web/.next
+web/tsconfig.tsbuildinfo
+
+# Build artifacts
+coverage
+build

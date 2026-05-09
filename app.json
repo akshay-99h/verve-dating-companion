@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Prompt Rotator",
-    "slug": "prompt-rotator",
+    "name": "Verve",
+    "slug": "verve",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -24,6 +24,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFF5F1"
       }
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4ea4c25b-6f2d-477a-8db4-5df6fbaddfed"
+      }
+    },
+    "owner": "akshay-99h"
   }
 }

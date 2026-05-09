@@ -3,9 +3,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { RotatorState, UserSession } from "../types";
 import { sanitizeAudience } from "./rotator";
 
-const STORAGE_KEY = "prompt-rotator:settings:v1";
-const SAVED_PROMPTS_KEY = "prompt-rotator:saved-prompts:v1";
-const SESSION_KEY = "prompt-rotator:session:v1";
+const STORAGE_KEY = "verve:settings:v1";
+const SAVED_PROMPTS_KEY = "verve:saved-prompts:v1";
+const SESSION_KEY = "verve:session:v1";
 
 export const DEFAULT_ROTATOR_STATE: RotatorState = {
   currentIndex: 0,
