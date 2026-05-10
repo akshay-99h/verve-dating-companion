@@ -706,6 +706,243 @@ select {
   transform: translateY(0);
 }
 
+.verve-mobile-shell {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + 24px)
+    18px
+    calc(env(safe-area-inset-bottom, 0px) + 112px);
+}
+
+.verve-mobile-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.verve-mobile-eyebrow {
+  margin: 0 0 2px;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.verve-mobile-title {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(3rem, 12vw, 4.25rem);
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+  font-weight: 700;
+}
+
+.verve-mobile-counter {
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1.15rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.verve-mobile-content,
+.verve-mobile-stack {
+  display: grid;
+  gap: 20px;
+}
+
+.verve-mobile-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.verve-mobile-chip {
+  min-height: 52px;
+  padding: 0 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: #151515;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.verve-mobile-chip[data-active="true"] {
+  border-color: #fff;
+  background: #fff;
+  color: #000;
+}
+
+.verve-mobile-chip[data-current="true"] {
+  border-color: rgba(255, 255, 255, 0.92);
+  background: transparent;
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.92);
+}
+
+.verve-mobile-stage,
+.verve-mobile-list,
+.verve-mobile-profile-block {
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.verve-mobile-stage {
+  display: grid;
+  gap: 28px;
+  padding: 28px 0 22px;
+}
+
+.verve-mobile-stage-copy,
+.verve-mobile-row-copy {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.verve-mobile-prompt {
+  margin: 0;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.35rem, 9vw, 3.3rem);
+  line-height: 1.18;
+  letter-spacing: -0.05em;
+  font-weight: 700;
+}
+
+.verve-mobile-stage-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: end;
+}
+
+.verve-mobile-hint,
+.verve-mobile-intro {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.verve-mobile-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.verve-mobile-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: #050505;
+  color: #fff;
+}
+
+.verve-mobile-section-heading {
+  margin: 0;
+  color: #fff;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.verve-mobile-list {
+  display: grid;
+}
+
+.verve-mobile-row {
+  display: grid;
+  gap: 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.verve-mobile-row-label {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.verve-mobile-row-text,
+.verve-mobile-profile-value {
+  margin: 0;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.6rem;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+
+.verve-mobile-inline-save,
+.verve-mobile-logout {
+  justify-self: start;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.verve-mobile-profile-block {
+  display: grid;
+  gap: 12px;
+  padding-top: 18px;
+}
+
+.verve-mobile-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 12;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 8px 8px calc(env(safe-area-inset-bottom, 0px) + 8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.96);
+  backdrop-filter: blur(24px);
+}
+
+.verve-mobile-dock-item {
+  flex: 1;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  min-height: 62px;
+  padding: 8px 4px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.verve-mobile-dock-item[data-active="true"] {
+  background: #151515;
+  color: #fff;
+}
+
 @media (max-width: 1023px) {
   .verve-main {
     min-height: 100vh;

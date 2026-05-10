@@ -1,12 +1,21 @@
 "use client"
 
 import * as React from "react"
+import {
+  BookmarkIcon,
+  MessageCircleMoreIcon,
+  MessagesSquareIcon,
+  RefreshCcwIcon,
+  SparklesIcon,
+  UserIcon,
+} from "lucide-react"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { useIsMobile } from "@/hooks/use-mobile"
 import {
   AUDIENCE_OPTIONS,
   formatAudienceLabel,
@@ -31,6 +40,7 @@ import { cn } from "@/lib/utils"
 
 type SectionKey = "replies" | "openers" | "topics" | "saved" | "about"
 type ItemKind = "reply" | "opener" | "topic"
+type MobileTab = "replies" | "openers" | "topics" | "saved" | "profile"
 type ReplyMood =
   | "all"
   | "flirty"
@@ -100,6 +110,18 @@ const ABOUT_COPY = [
   "Replies are tuned for the middle of a conversation when you want something with more personality than a safe fallback.",
   "Openers stay lighter and quicker, so the first message does not sound stiff or overbuilt.",
   "Topics give you a softer way to keep the exchange moving when the next question matters more than the perfect line.",
+]
+
+const MOBILE_TABS: Array<{
+  key: MobileTab
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+}> = [
+  { key: "replies", label: "Replies", icon: MessageCircleMoreIcon },
+  { key: "openers", label: "Openers", icon: SparklesIcon },
+  { key: "topics", label: "Topics", icon: MessagesSquareIcon },
+  { key: "saved", label: "Saved", icon: BookmarkIcon },
+  { key: "profile", label: "Profile", icon: UserIcon },
 ]
 
 function clampIndex(index: number, size: number) {
@@ -352,7 +374,9 @@ export function PromptDashboard({
   userName: string
   userEmail: string
 }) {
+  const isMobile = useIsMobile()
   const [activeSection, setActiveSection] = React.useState<SectionKey>("replies")
+  const [mobileTab, setMobileTab] = React.useState<MobileTab>("replies")
   const [query, setQuery] = React.useState("")
   const [selectedAudience, setSelectedAudience] = React.useState<AudienceCategory>("all")
   const [selectedReplyMood, setSelectedReplyMood] = React.useState<ReplyMood>("all")
@@ -364,6 +388,8 @@ export function PromptDashboard({
   const [savedItems, setSavedItems] = React.useState<SavedItem[]>([])
   const [copyStatus, setCopyStatus] = React.useState("")
   const sectionRefs = React.useRef<Partial<Record<SectionKey, HTMLElement | null>>>({})
+  const swipeStartX = React.useRef<number | null>(null)
+  const swipeStartY = React.useRef<number | null>(null)
   const sectionLabel = activeSection.charAt(0).toUpperCase() + activeSection.slice(1)
 
   const moodFilteredReplies = React.useMemo(
@@ -405,6 +431,7 @@ export function PromptDashboard({
       if (raw) {
         const parsed = JSON.parse(raw) as Partial<{
           activeSection: SectionKey
+          mobileTab: MobileTab
           openerCategory: OpenerCategory
           openerIndex: number
           query: string
@@ -417,6 +444,13 @@ export function PromptDashboard({
 
         if (parsed.activeSection && SECTION_ORDER.includes(parsed.activeSection)) {
           setActiveSection(parsed.activeSection)
+        }
+
+        if (
+          parsed.mobileTab &&
+          MOBILE_TABS.some((tab) => tab.key === parsed.mobileTab)
+        ) {
+          setMobileTab(parsed.mobileTab)
         }
 
         if (typeof parsed.query === "string") {
@@ -471,6 +505,7 @@ export function PromptDashboard({
         STORAGE_KEY,
         JSON.stringify({
           activeSection,
+          mobileTab,
           openerCategory,
           openerIndex,
           query,
@@ -486,6 +521,7 @@ export function PromptDashboard({
     }
   }, [
     activeSection,
+    mobileTab,
     openerCategory,
     openerIndex,
     query,
@@ -699,6 +735,355 @@ export function PromptDashboard({
   const replySaved = currentReply ? savedItems.some((item) => item.id === currentReply.id) : false
   const openerSaved = currentOpener ? savedItems.some((item) => item.id === currentOpener.id) : false
   const topicSaved = currentTopic ? savedItems.some((item) => item.id === currentTopic.id) : false
+
+  function handleStageTouchStart(event: React.TouchEvent<HTMLElement>) {
+    const touch = event.changedTouches[0]
+    swipeStartX.current = touch.clientX
+    swipeStartY.current = touch.clientY
+  }
+
+  function handleStageTouchEnd(
+    event: React.TouchEvent<HTMLElement>,
+    onNext: () => void,
+    onPrevious: () => void,
+  ) {
+    if (swipeStartX.current === null || swipeStartY.current === null) {
+      return
+    }
+
+    const touch = event.changedTouches[0]
+    const deltaX = touch.clientX - swipeStartX.current
+    const deltaY = touch.clientY - swipeStartY.current
+
+    swipeStartX.current = null
+    swipeStartY.current = null
+
+    if (Math.abs(deltaX) < 44 || Math.abs(deltaX) < Math.abs(deltaY)) {
+      return
+    }
+
+    if (deltaX < 0) {
+      onNext()
+    } else {
+      onPrevious()
+    }
+  }
+
+  const mobileMeta: Record<MobileTab, { eyebrow: string; title: string; counter: string }> = {
+    replies: {
+      eyebrow: "Photo reply",
+      title: "Replies",
+      counter: currentReply ? `${clampIndex(replyIndex, filteredReplies.length) + 1} / ${filteredReplies.length}` : `0 / ${filteredReplies.length}`,
+    },
+    openers: {
+      eyebrow: "First move",
+      title: "Openers",
+      counter: `${filteredOpeners.length} lines`,
+    },
+    topics: {
+      eyebrow: "Conversation topic",
+      title: "Topics",
+      counter: `${filteredTopics.length} ideas`,
+    },
+    saved: {
+      eyebrow: "Saved lines",
+      title: "Saved",
+      counter: `${filteredSaved.length}`,
+    },
+    profile: {
+      eyebrow: "Profile",
+      title: "Profile",
+      counter: userName,
+    },
+  }
+
+  if (isMobile) {
+    return (
+      <section className="verve-mobile-shell">
+        <div className="verve-mobile-top">
+          <div>
+            <p className="verve-mobile-eyebrow">{mobileMeta[mobileTab].eyebrow}</p>
+            <h1 className="verve-mobile-title">{mobileMeta[mobileTab].title}</h1>
+          </div>
+          <p className="verve-mobile-counter">{mobileMeta[mobileTab].counter}</p>
+        </div>
+
+        <div className="verve-mobile-content">
+          {mobileTab === "replies" ? (
+            <div className="verve-mobile-stack">
+              <div className="verve-mobile-chip-grid">
+                {AUDIENCE_OPTIONS.map((value) => (
+                  <button
+                    key={value}
+                    className="verve-mobile-chip"
+                    data-active={selectedAudience === value}
+                    onClick={() => {
+                      setSelectedAudience(value)
+                      setReplyIndex(0)
+                    }}
+                    type="button"
+                  >
+                    {formatAudienceLabel(value)}
+                  </button>
+                ))}
+              </div>
+
+              <section
+                className="verve-mobile-stage"
+                onTouchEnd={(event) =>
+                  handleStageTouchEnd(
+                    event,
+                    () => setReplyIndex((current) => getNextIndex(current, filteredReplies.length)),
+                    () => setReplyIndex((current) => getPreviousIndex(current, filteredReplies.length)),
+                  )
+                }
+                onTouchStart={handleStageTouchStart}
+              >
+                {currentReply ? (
+                  <>
+                    <button
+                      className="verve-mobile-stage-copy"
+                      onClick={() => copyText(currentReply.text)}
+                      type="button"
+                    >
+                      <p className="verve-mobile-prompt">{currentReply.text}</p>
+                    </button>
+                    <div className="verve-mobile-stage-footer">
+                      <p className="verve-mobile-hint">Tap to copy or swipe to change the reply.</p>
+                      <div className="verve-mobile-actions">
+                        <button
+                          aria-label="Shuffle reply"
+                          className="verve-mobile-icon-button"
+                          onClick={() =>
+                            setReplyIndex((current) => getRandomIndex(filteredReplies.length, current))
+                          }
+                          type="button"
+                        >
+                          <RefreshCcwIcon className="size-6" />
+                        </button>
+                        <button
+                          aria-label={replySaved ? "Unsave reply" : "Save reply"}
+                          className="verve-mobile-icon-button"
+                          onClick={() => onToggleSave(currentReply, "reply")}
+                          type="button"
+                        >
+                          <BookmarkIcon className={cn("size-6", replySaved && "fill-current")} />
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <p className="verve-mobile-hint">No reply matches the current filters.</p>
+                )}
+              </section>
+
+              <div className="verve-mobile-stack">
+                <h2 className="verve-mobile-section-heading">Moods</h2>
+                <div className="verve-mobile-chip-grid">
+                  {REPLY_MOOD_OPTIONS.map((value) => {
+                    const isSelected = selectedReplyMood === value
+                    const isCurrent = currentReplyMood === value && !isSelected
+
+                    return (
+                      <button
+                        key={value}
+                        className="verve-mobile-chip"
+                        data-active={isSelected}
+                        data-current={isCurrent}
+                        onClick={() => {
+                          setSelectedReplyMood(value)
+                          setReplyIndex(0)
+                        }}
+                        type="button"
+                      >
+                        {REPLY_MOOD_LABELS[value]}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {mobileTab === "openers" ? (
+            <div className="verve-mobile-stack">
+              <p className="verve-mobile-intro">
+                Shorter lines you can use when you want a lighter entry point than a direct photo reply.
+              </p>
+              <div className="verve-mobile-chip-grid">
+                {OPENER_CATEGORY_OPTIONS.map((value) => (
+                  <button
+                    key={value}
+                    className="verve-mobile-chip"
+                    data-active={openerCategory === value}
+                    onClick={() => {
+                      setOpenerCategory(value)
+                      setOpenerIndex(0)
+                    }}
+                    type="button"
+                  >
+                    {OPENER_CATEGORY_LABELS[value]}
+                  </button>
+                ))}
+              </div>
+              <div className="verve-mobile-list">
+                {filteredOpeners.map((item) => (
+                  <article key={item.id} className="verve-mobile-row">
+                    <p className="verve-mobile-row-label">{OPENER_CATEGORY_LABELS[item.category]}</p>
+                    <button
+                      className="verve-mobile-row-copy"
+                      onClick={() => copyText(item.text)}
+                      type="button"
+                    >
+                      <p className="verve-mobile-row-text">{item.text}</p>
+                    </button>
+                    <button
+                      className="verve-mobile-inline-save"
+                      onClick={() => onToggleSave(item, "opener")}
+                      type="button"
+                    >
+                      {savedItems.some((savedItem) => savedItem.id === item.id) ? "Saved" : "Save"}
+                    </button>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {mobileTab === "topics" ? (
+            <div className="verve-mobile-stack">
+              <p className="verve-mobile-intro">
+                A larger bank of lighter prompts when you want to keep the conversation moving without sounding over-rehearsed.
+              </p>
+              <div className="verve-mobile-chip-grid">
+                {SMALL_TALK_CATEGORY_OPTIONS.map((value) => (
+                  <button
+                    key={value}
+                    className="verve-mobile-chip"
+                    data-active={topicCategory === value}
+                    onClick={() => {
+                      setTopicCategory(value)
+                      setTopicIndex(0)
+                    }}
+                    type="button"
+                  >
+                    {SMALL_TALK_CATEGORY_LABELS[value]}
+                  </button>
+                ))}
+              </div>
+              <div className="verve-mobile-list">
+                {filteredTopics.map((item) => (
+                  <article key={item.id} className="verve-mobile-row">
+                    <p className="verve-mobile-row-label">{SMALL_TALK_CATEGORY_LABELS[item.category]}</p>
+                    <button
+                      className="verve-mobile-row-copy"
+                      onClick={() => copyText(item.text)}
+                      type="button"
+                    >
+                      <p className="verve-mobile-row-text">{item.text}</p>
+                    </button>
+                    <button
+                      className="verve-mobile-inline-save"
+                      onClick={() => onToggleSave(item, "topic")}
+                      type="button"
+                    >
+                      {savedItems.some((savedItem) => savedItem.id === item.id) ? "Saved" : "Save"}
+                    </button>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {mobileTab === "saved" ? (
+            <div className="verve-mobile-stack">
+              <p className="verve-mobile-intro">
+                Keep the replies, openers, and topics that fit your tone so you can come back to them fast.
+              </p>
+              {filteredSaved.length > 0 ? (
+                <div className="verve-mobile-list">
+                  {filteredSaved.map((item) => (
+                    <article key={item.id} className="verve-mobile-row">
+                      <p className="verve-mobile-row-label">{`${item.kind} / ${item.category}`}</p>
+                      <button
+                        className="verve-mobile-row-copy"
+                        onClick={() => copyText(item.text)}
+                        type="button"
+                      >
+                        <p className="verve-mobile-row-text">{item.text}</p>
+                      </button>
+                      <button
+                        className="verve-mobile-inline-save"
+                        onClick={() => saveOrRemove(item)}
+                        type="button"
+                      >
+                        Remove
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <p className="verve-mobile-hint">Save a few items from the other tabs and they will show up here.</p>
+              )}
+            </div>
+          ) : null}
+
+          {mobileTab === "profile" ? (
+            <div className="verve-mobile-stack">
+              <div className="verve-mobile-profile-block">
+                <p className="verve-mobile-row-label">Signed in</p>
+                <p className="verve-mobile-profile-value">{userName}</p>
+                <p className="verve-mobile-hint">{userEmail}</p>
+              </div>
+              <div className="verve-mobile-list">
+                <div className="verve-mobile-row">
+                  <p className="verve-mobile-row-label">Saved items</p>
+                  <p className="verve-mobile-row-text">{String(savedItems.length).padStart(2, "0")}</p>
+                </div>
+                <div className="verve-mobile-row">
+                  <p className="verve-mobile-row-label">Library size</p>
+                  <p className="verve-mobile-row-text">
+                    {prompts.length + openers.length + smallTalkTopics.length} lines
+                  </p>
+                </div>
+              </div>
+              <button
+                className="verve-mobile-logout"
+                onClick={() => window.location.assign("/logout")}
+                type="button"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : null}
+        </div>
+
+        <nav className="verve-mobile-dock" aria-label="Primary">
+          {MOBILE_TABS.map((tab) => {
+            const Icon = tab.icon
+            const isActive = mobileTab === tab.key
+
+            return (
+              <button
+                key={tab.key}
+                className="verve-mobile-dock-item"
+                data-active={isActive}
+                onClick={() => setMobileTab(tab.key)}
+                type="button"
+              >
+                <Icon className="size-5" />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </nav>
+
+        <div aria-live="polite" className={cn("copy-toast", copyStatus && "copy-toast--visible")}>
+          {copyStatus}
+        </div>
+      </section>
+    )
+  }
 
   return (
     <SidebarProvider
