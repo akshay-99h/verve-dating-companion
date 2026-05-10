@@ -3,5 +3,5 @@ import { authkitMiddleware } from "@workos-inc/authkit-nextjs";
 export default authkitMiddleware();
 
 export const config = {
-  matcher: ["/app/:path*", "/login", "/signup", "/callback"],
+  matcher: ["/", "/app/:path*", "/login", "/signup", "/callback"],
 };
