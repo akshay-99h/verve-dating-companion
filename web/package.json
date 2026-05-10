@@ -29,7 +29,7 @@
     "@tailwindcss/postcss": "^4.3.0",
     "@tanstack/react-table": "^8.21.3",
     "@vercel/analytics": "^2.0.1",
-    "@workos-inc/authkit-nextjs": "^0.17.0",
+    "@workos-inc/authkit-nextjs": "^2.11.1",
     "class-variance-authority": "^0.7.1",
     "gsap": "^3.15.0",
     "lucide-react": "^1.14.0",
